@@ -29,7 +29,6 @@ const tenancyId = config.get("tenancyId");
 await selectRegion();
 
 await setNamespaceEnv();
-const namespace = config.get("namespace");
 
 await setCompartmentEnv();
 await createSSHKeys(projectName);
@@ -42,10 +41,7 @@ async function selectProfile() {
     encoding: "utf-8",
   });
 
-  //  Parse text data to object
-
   const ociConfig = iniParse(ociConfigFile);
-
   const profileList = Object.keys(ociConfig);
 
   await inquirer
