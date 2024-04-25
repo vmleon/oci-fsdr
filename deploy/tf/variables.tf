@@ -51,3 +51,7 @@ variable "artifacts_par_expiration_in_days" {
   type    = number
   default = 7
 }
+
+variable "region_peer" {
+  type = string
+}

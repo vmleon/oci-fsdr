@@ -27,6 +27,7 @@ const profile = config.get("profile");
 const tenancyId = config.get("tenancyId");
 
 await selectRegion();
+await selectRegionPeer();
 
 await setNamespaceEnv();
 
@@ -79,6 +80,30 @@ async function selectRegion() {
     .then((answers) => {
       config.set("regionName", answers.region.name);
       config.set("regionKey", answers.region.key);
+    });
+}
+
+async function selectRegionPeer() {
+  const regionName = config.get("regionName");
+  const listSubscribedRegions = (await getRegions(profile, tenancyId))
+    .sort((r1, r2) => r1.isHomeRegion > r2.isHomeRegion)
+    .filter((r) => r.name !== regionName);
+
+  await inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "regionPeer",
+        message: "Select the PEER region",
+        choices: listSubscribedRegions.map((r) => r.name),
+        filter(val) {
+          return listSubscribedRegions.find((r) => r.name === val);
+        },
+      },
+    ])
+    .then((answers) => {
+      config.set("regionPeerName", answers.regionPeer.name);
+      config.set("regionPeerKey", answers.regionPeer.key);
     });
 }
 

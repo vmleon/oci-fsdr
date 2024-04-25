@@ -8,7 +8,9 @@ Oracle Cloud Infrastructure (OCI) [Full Stack Disaster Recovery](https://www.ora
 
 Businesses with existing applications using Oracle Database Cloud Services to create a Disaster Recovery plan with OCI Full Stack Disaster Recovery (FSDR).
 
-The application is a Java middleware exposing a REST API exposed through a Load Balancer and Oracle Exadata Database Dedicated.
+The example is an Active-Pasive DR.
+
+The application is composed of an **Oracle Exadata Database Dedicated** a **Java REST API** exposed through a **Load Balancer**.
 
 ![Architecture](./images/fsdr_architecture.drawio.png)
 

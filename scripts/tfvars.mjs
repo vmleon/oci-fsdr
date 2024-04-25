@@ -19,6 +19,7 @@ await generateTFVars();
 async function generateTFVars() {
   const tenancyId = config.get("tenancyId");
   const regionName = config.get("regionName");
+  const regionPeerName = config.get("regionPeerName");
   const compartmentId = config.get("compartmentId");
   const compartmentName = config.get("compartmentName");
   const publicKeyContent = config.get("publicKeyContent");
@@ -38,6 +39,7 @@ async function generateTFVars() {
   const output = Mustache.render(tfvarsTemplate, {
     tenancy_id: tenancyId,
     region_name: regionName,
+    region_peer: regionPeerName,
     compartment_id: compartmentId,
     ssh_public_key: publicKeyContent,
     ssh_private_key_path: sshPrivateKeyPath,
