@@ -14,6 +14,8 @@ The application is composed of an **Oracle Exadata Database Dedicated** a **Java
 
 ![Architecture](./images/fsdr_architecture.drawio.png)
 
+For details check [NOTES](NOTES.md)
+
 ## Deploy solution
 
 Answer all the questions from `setenv.mjs` script:

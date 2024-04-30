@@ -26,6 +26,7 @@ async function generateTFVars() {
   const sshPrivateKeyPath = config.get("privateKeyPath");
   const certFullchain = config.get("certFullchain");
   const certPrivateKey = config.get("certPrivateKey");
+  const instanceShape = config.get("instanceShape");
 
   // const backend = config.get("backend");
   // const backendArtifactUrl = backend.fullPath;
@@ -46,6 +47,7 @@ async function generateTFVars() {
     cert_fullchain: certFullchain,
     cert_private_key: certPrivateKey,
     project_name: projectName,
+    instance_shape: instanceShape,
     // backend_artifact_url: backendArtifactUrl,
     // ansible_backend_artifact_url: ansibleBackendArtifactUrl,
   });

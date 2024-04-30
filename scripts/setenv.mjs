@@ -8,6 +8,7 @@ import {
   getNamespace,
   getRegions,
   searchCompartmentIdByName,
+  getEFlexShapes,
 } from "./lib/oci.mjs";
 import { createSSHKeyPair, createSelfSignedCert } from "./lib/crypto.mjs";
 
@@ -27,11 +28,15 @@ const profile = config.get("profile");
 const tenancyId = config.get("tenancyId");
 
 await selectRegion();
+const regionName = config.get("regionName");
+
 await selectRegionPeer();
 
 await setNamespaceEnv();
 
 await setCompartmentEnv();
+const compartmentId = config.get("compartmentId");
+await selectComputeShape();
 await createSSHKeys(projectName);
 await createCerts();
 
@@ -131,6 +136,27 @@ async function setCompartmentEnv() {
       );
       config.set("compartmentName", compartmentName);
       config.set("compartmentId", compartmentId);
+    });
+}
+
+async function selectComputeShape() {
+  const listComputeShapes = await getEFlexShapes(
+    profile,
+    regionName,
+    compartmentId
+  );
+
+  await inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "instance_shape",
+        message: "Select the Compute Shape",
+        choices: listComputeShapes.sort().reverse(),
+      },
+    ])
+    .then((answers) => {
+      config.set("instanceShape", answers.instance_shape);
     });
 }
 

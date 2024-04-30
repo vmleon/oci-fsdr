@@ -39,13 +39,13 @@ variable "project_name" {
 #   type = string
 # }
 
-# variable "instance_shape" {
-#   default = "VM.Standard.E4.Flex"
-# }
+variable "instance_shape" {
+  default = "VM.Standard.E4.Flex"
+}
 
-# variable "backend_node_count" {
-#   default = "1"
-# }
+variable "app_node_count" {
+  default = "1"
+}
 
 variable "artifacts_par_expiration_in_days" {
   type    = number

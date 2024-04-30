@@ -1,6 +1,6 @@
 #!/usr/bin/env zx
 import { exitWithError } from "./utils.mjs";
-import { where, max } from "underscore";
+import { where, max, uniq, sortBy } from "underscore";
 
 export async function getRegions(profile, tenancyId) {
   try {
@@ -386,4 +386,25 @@ export async function getLatestGenAIModels(
 
     return latestVersion;
   } catch (error) {}
+}
+
+export async function getEFlexShapes(profile, regionName, compartmentId) {
+  try {
+    const { stdout, exitCode, stderr } = await $`oci compute shape list --all  \
+                  --compartment-id ${compartmentId} \
+                  --region ${regionName} \
+                  --profile ${profile}`;
+    if (exitCode !== 0) {
+      exitWithError(stderr);
+    }
+    if (!stdout.length) return [];
+    const data = JSON.parse(stdout.trim()).data;
+    const eFlexShapes = data
+      .map((s) => s.shape)
+      .filter((s) => s.startsWith("VM.Standard.E") && s.endsWith(".Flex"));
+    const uniqEFlexShapes = uniq(eFlexShapes);
+    return sortBy(uniqEFlexShapes, "shape");
+  } catch (error) {
+    exitWithError(`Error: getting shapes ${error.message}`);
+  }
 }
