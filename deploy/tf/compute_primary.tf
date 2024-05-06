@@ -1,5 +1,13 @@
 locals {
   list_app_instances = toset([for n in range(var.app_node_count): "app${n}"])
+  backend_cloud_init_content = templatefile("${path.module}/userdata/backend_bootstrap.tftpl", {
+    backend_jar_par_full_path = oci_objectstorage_preauthrequest.backend_artifact_par.full_path
+    ansible_backend_par_full_path = oci_objectstorage_preauthrequest.ansible_backend_artifact_par.full_path
+    wallet_par_full_path = oci_objectstorage_preauthrequest.wallet_par.full_path
+    region_code_name = var.region
+    db_service = "${local.project_name}${local.deploy_id}"
+    db_password = random_password.adb_admin_password_primary.result
+  })
 }
 
 data "oci_core_images" "ol8_images" {
@@ -23,7 +31,7 @@ resource "oci_core_instance" "app" {
 
   metadata = {
     ssh_authorized_keys = var.ssh_public_key
-    # user_data           = base64encode(local.backend_cloud_init_content)
+    user_data           = base64encode(local.backend_cloud_init_content)
   }
 
   agent_config {

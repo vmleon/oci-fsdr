@@ -15,5 +15,9 @@ terraform {
       version = "~> 3"
       # https://registry.terraform.io/providers/hashicorp/random/
     }
+    archive = {
+      source = "hashicorp/archive"
+      version = "2.4.2"
+    }
   }
 }

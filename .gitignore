@@ -1,4 +1,14 @@
+# Node.js
 node_modules
+
+# Java
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# artifacts
 .certs
 .artifacts
 shapeParams.json
@@ -29,3 +39,10 @@ terraform.rc
 # Editors and Systems
 .vscode/
 .DS_Store
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/

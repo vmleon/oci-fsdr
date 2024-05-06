@@ -16,6 +16,31 @@ The application is composed of an **Oracle Exadata Database Dedicated** a **Java
 
 For details check [NOTES](NOTES.md)
 
+## TODO list
+
+- Load Balancers
+- Java App (start and stop)
+- Rsync
+- Include constant synthetic workload
+- Oracle Database
+- Data Guard
+- Include OCI Vault secret for Oracle Database
+- Include OCI Notification and OCI Events to get notified by email on switchover/failover
+
+## Build Application
+
+```bash
+cd src/backend
+```
+
+```bash
+./gradlew clean bootJar
+```
+
+```bash
+cd ../..
+```
+
 ## Deploy solution
 
 Answer all the questions from `setenv.mjs` script:
@@ -58,7 +83,13 @@ cd ../..
 
 ## Run Disaster Recovery
 
-> Work In Progress
+This project uses K6 to test the deployment.
+
+To Install K6 follow this link [Get Started > Installation](https://k6.io/docs/get-started/installation/).
+
+```bash
+k6 run client/request.js
+```
 
 ## Clean up
 

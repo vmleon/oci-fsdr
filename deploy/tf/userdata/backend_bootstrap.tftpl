@@ -1,0 +1,67 @@
+#!/bin/bash
+
+touch /home/opc/cloud-init.log
+chown -R opc:opc /home/opc/cloud-init.log
+
+# Update and upgrade repo
+dnf update -y
+dnf upgrade -y
+
+dnf install ansible -y | tee -a /home/opc/cloud-init.log
+
+# Get wallet
+cat "wallet_par_full_path: ${wallet_par_full_path}" | tee -a /home/opc/cloud-init.log
+curl "${wallet_par_full_path}" -o /home/opc/wallet.zip.b64 | tee -a /home/opc/cloud-init.log
+base64 -d /home/opc/wallet.zip.b64 > /home/opc/wallet.zip && rm -rf /home/opc/wallet.zip.b64
+
+# Extract wallet
+mkdir -p /home/opc/backend/wallet
+unzip /home/opc/wallet.zip -d /home/opc/backend/wallet | tee -a /home/opc/cloud-init.log
+chown -R opc:opc /home/opc/backend/wallet
+
+# Get backend_jar
+curl "${backend_jar_par_full_path}" -o /home/opc/backend_jar.zip | tee -a /home/opc/cloud-init.log
+
+# Extract backend_jar
+mkdir -p /home/opc/backend
+unzip /home/opc/backend_jar.zip -d /home/opc/backend | tee -a /home/opc/cloud-init.log && \
+    rm /home/opc/backend_jar.zip
+chown -R opc:opc /home/opc/backend
+
+# Get ansible_backend
+curl "${ansible_backend_par_full_path}" -o /home/opc/ansible_backend.zip | tee -a /home/opc/cloud-init.log
+
+# Extract ansible_backend
+mkdir -p /home/opc/ansible_backend
+unzip /home/opc/ansible_backend.zip -d /home/opc/ansible_backend | tee -a /home/opc/cloud-init.log && \
+    rm /home/opc/ansible_backend.zip
+chown -R opc:opc /home/opc/ansible_backend
+
+cat <<EOT >> /home/opc/ansible_params.json
+{
+  "backend_dest_directory": "/home/opc/backend",
+  "backend_jar_file": "backend-0.0.1.jar",
+  "region_code_name": "${region_code_name}",
+  "db_service": "${db_service}",
+  "db_password": "${db_password}"
+}
+EOT
+chown opc:opc /home/opc/ansible_params.json
+
+cat <<EOT >> /home/opc/server.ini
+[backend]
+localhost ansible_connection=local ansible_user=root
+
+[backend:vars]
+ansible_python_interpreter="/usr/bin/python3"
+EOT
+chown opc:opc /home/opc/server.ini
+
+touch /home/opc/ansible-playbook.log
+chown opc:opc /home/opc/ansible-playbook.log
+ANSIBLE_PYTHON_INTERPRETER="/usr/bin/python3" ansible-galaxy collection install ansible.posix | tee -a /home/opc/ansible-playbook.log
+
+ANSIBLE_PYTHON_INTERPRETER="/usr/bin/python3" ansible-playbook \
+    -i /home/opc/server.ini \
+    --extra-vars "@/home/opc/ansible_params.json" \
+    /home/opc/ansible_backend/server.yaml | tee -a /home/opc/ansible-playbook.log

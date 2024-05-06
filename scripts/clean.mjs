@@ -20,14 +20,18 @@ const namespace = config.get("namespace");
 const regionKey = config.get("regionKey");
 const regionName = config.get("regionName");
 
-console.log(`${chalk.green("Artifacts")} deleted`);
 await $`rm -rf ./.artifacts`;
-console.log(`${chalk.green("Certs")} deleted`);
+console.log(`${chalk.green("Artifacts")} deleted`);
 await $`rm -rf ./.certs`;
+console.log(`${chalk.green("Certs")} deleted`);
 
-console.log(`${chalk.green("SSH keys")} deleted`);
 const sshPathParam = path.join(os.homedir(), ".ssh", projectName);
 await $`rm -f ${sshPathParam}*`;
+console.log(`${chalk.green("SSH keys")} deleted`);
 
-console.log(`${chalk.green("Config file")} deleted`);
+const generatedTf = path.join("deploy", "tf", "generated");
+await $`rm -f ${generatedTf}/*`;
+console.log(`${chalk.green(generatedTf)} folder deleted`);
+
 config.clear();
+console.log(`${chalk.green("Config file")} deleted`);
