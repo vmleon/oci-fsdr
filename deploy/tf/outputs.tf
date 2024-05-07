@@ -31,3 +31,7 @@ output "db_password_standby" {
   value = random_password.adb_admin_password_standby.result
   sensitive = true
 }
+
+output "load_balancer" {
+  value = oci_core_public_ip.reserved_ip.ip_address
+}

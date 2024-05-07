@@ -1,16 +1,16 @@
-
 spring:
   main:
     banner-mode: "off"
   profiles:
     active: production
   datasource:
-    driver-class-name: oracle.jdbc.OracleDriver
     url: jdbc:oracle:thin:@{{db_service}}_high?TNS_ADMIN=/home/opc/backend/wallet
     username: ADMIN
     password: {{db_password}}
+    driver-class-name: oracle.jdbc.OracleDriver
     type: oracle.ucp.jdbc.PoolDataSource
     oracleucp:
+      connection-factory-classname: oracle.jdbc.pool.OracleDataSource
       sql-for-validate-connection: SELECT * FROM dual
       connection-pool-name: connectionPoolName1
       initial-pool-size: 5
@@ -20,6 +20,8 @@ spring:
     hibernate:
       use-new-id-generator-mappings: false
       ddl-auto: update
-oracle:
-  jdbc:
-    fanEnabled: true
+    properties:
+      hibernate:
+        format_sql: true
+oraclecloud:
+  region-name: {{region_code_name}}

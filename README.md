@@ -16,7 +16,7 @@ The application is composed of an **Oracle Exadata Database Dedicated** a **Java
 
 For details check [NOTES](NOTES.md)
 
-## TODO list
+## TODO list
 
 - Load Balancers
 - Java App (start and stop)
@@ -27,7 +27,7 @@ For details check [NOTES](NOTES.md)
 - Include OCI Vault secret for Oracle Database
 - Include OCI Notification and OCI Events to get notified by email on switchover/failover
 
-## Build Application
+## Build Application
 
 ```bash
 cd src/backend
@@ -79,6 +79,12 @@ Come back to the root folder
 
 ```bash
 cd ../..
+```
+
+## Test both deployments
+
+```bash
+curl -v -XPOST -H "Content-Type: application/json" -d "@request.json" https://LOAD_BALANCER_IP_ADDRESS/api/info | jq
 ```
 
 ## Run Disaster Recovery

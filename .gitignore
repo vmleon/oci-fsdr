@@ -5,8 +5,8 @@ node_modules
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
-bin/main/*
-bin/test/*
+**/bin/main/*
+**/bin/test/*
 !**/src/main/**/build/
 !**/src/test/**/build/
 application-local.yaml
@@ -15,6 +15,8 @@ application-local.yaml
 .certs
 .artifacts
 shapeParams.json
+*.zip
+deploy/tf/generated/
 
 # Logs
 logs
