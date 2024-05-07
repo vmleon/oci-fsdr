@@ -5,8 +5,11 @@ node_modules
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
+bin/main/*
+bin/test/*
 !**/src/main/**/build/
 !**/src/test/**/build/
+application-local.yaml
 
 # artifacts
 .certs
