@@ -10,7 +10,7 @@ Businesses with existing applications using Oracle Database Cloud Services to cr
 
 The example is an Active-Pasive DR.
 
-The application is composed of an **Oracle Exadata Database Dedicated** a **Java REST API** exposed through a **Load Balancer**.
+The application is composed of an **Oracle Exadata Database Dedicated** or **Autonomous Database** and a **Java REST API** exposed through a **Load Balancer**.
 
 ![Architecture](./images/fsdr_architecture.drawio.png)
 
@@ -22,8 +22,14 @@ For details check [NOTES](NOTES.md)
 - Java App (start and stop)
 - Rsync
 - Include constant synthetic workload
-- Oracle Database
+- ADB-S
+- Change Architecture to include ADB-S, or ExaDB-D, or...
 - Data Guard
+- Simulate Disaster
+- Add Object Storage in the DR sync
+- ExaDB-D
+- Logging Analytics
+- Vault integration
 - Include OCI Vault secret for Oracle Database
 - Include OCI Notification and OCI Events to get notified by email on switchover/failover
 
@@ -84,7 +90,7 @@ cd ../..
 ## Test both deployments
 
 ```bash
-curl -v -XPOST -H "Content-Type: application/json" -d "@request.json" https://LOAD_BALANCER_IP_ADDRESS/api/info | jq
+curl -sk -XPOST -H "Content-Type: application/json" -d "@request.json" https://LOAD_BALANCER_IP_ADDRESS/api/info | jq
 ```
 
 ## Run Disaster Recovery

@@ -30,7 +30,7 @@ await $`rm -f ${sshPathParam}*`;
 console.log(`${chalk.green("SSH keys")} deleted`);
 
 const generatedTf = path.join("deploy", "tf", "generated");
-await $`rm -f ${generatedTf}/*`;
+await $`rm -rf ${generatedTf}/*`;
 console.log(`${chalk.green(generatedTf)} folder deleted`);
 
 config.clear();
