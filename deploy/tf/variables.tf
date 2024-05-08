@@ -72,3 +72,11 @@ variable "autonomous_database_data_storage_size_in_tbs" {
   type    = number
   default = 1
 }
+
+variable "lb_shape_max_bandwidth" {
+  default = 40
+}
+
+variable "lb_shape_min_bandwidth" {
+  default = 10
+}

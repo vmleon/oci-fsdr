@@ -20,12 +20,13 @@ For details check [NOTES](NOTES.md)
 
 - Load Balancers
 - Java App (start and stop)
+- FSDR infra
+- ADB-S
+- Data Guard
+- Change Architecture to include ADB-S, or ExaDB-D, or...
+- Simulate Disaster
 - Rsync
 - Include constant synthetic workload
-- ADB-S
-- Change Architecture to include ADB-S, or ExaDB-D, or...
-- Data Guard
-- Simulate Disaster
 - Add Object Storage in the DR sync
 - ExaDB-D
 - Logging Analytics

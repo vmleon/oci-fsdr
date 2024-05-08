@@ -6,7 +6,7 @@ spring:
   datasource:
     url: jdbc:oracle:thin:@{{db_service}}_high?TNS_ADMIN=/home/opc/backend/wallet
     username: ADMIN
-    password: {{db_password}}
+    password: "{{db_password}}"
     driver-class-name: oracle.jdbc.OracleDriver
     type: oracle.ucp.jdbc.PoolDataSource
     oracleucp:

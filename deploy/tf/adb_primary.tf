@@ -24,8 +24,6 @@ resource "oci_database_autonomous_database" "adb" {
   license_model               = var.autonomous_database_db_license
 }
 
-# For mTLS and Wallet connectivity consider the following code
-
 resource "oci_database_autonomous_database_wallet" "adb_wallet" {
   autonomous_database_id = oci_database_autonomous_database.adb.id
   password               = random_password.adb_admin_password_primary.result

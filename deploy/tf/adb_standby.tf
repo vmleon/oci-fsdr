@@ -9,7 +9,7 @@ resource "random_password" "adb_admin_password_standby" {
 }
 
 resource "oci_database_autonomous_database" "adb_standby" {
-  provider = oci.peer
+  provider       = oci.peer
   compartment_id = var.compartment_ocid
   db_name        = "${local.project_name}${local.deploy_id}"
 
@@ -25,10 +25,8 @@ resource "oci_database_autonomous_database" "adb_standby" {
   license_model               = var.autonomous_database_db_license
 }
 
-# For mTLS and Wallet connectivity consider the following code
-
 resource "oci_database_autonomous_database_wallet" "adb_wallet_standby" {
-  provider = oci.peer
+  provider               = oci.peer
   autonomous_database_id = oci_database_autonomous_database.adb_standby.id
   password               = random_password.adb_admin_password_standby.result
   base64_encode_content  = "true"

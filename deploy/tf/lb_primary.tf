@@ -1,11 +1,3 @@
-variable "lb_shape_max_bandwidth" {
-  default = 40
-}
-
-variable "lb_shape_min_bandwidth" {
-  default = 10
-}
-
 resource "oci_core_public_ip" "reserved_ip" {
   compartment_id = var.compartment_ocid
   lifetime       = "RESERVED"

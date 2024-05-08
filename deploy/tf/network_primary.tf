@@ -11,6 +11,7 @@ resource "oci_core_drg" "drg_primary" {
   display_name   = "DRG Primary ${local.project_name} ${local.deploy_id}"
 }
 
+// rename to drg_attachment_primary
 resource "oci_core_drg_attachment" "drg_primary_attachment" {
   drg_id       = oci_core_drg.drg_primary.id
   vcn_id       = oci_core_virtual_network.vcn_primary.id
