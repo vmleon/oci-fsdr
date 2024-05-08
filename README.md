@@ -18,8 +18,6 @@ For details check [NOTES](NOTES.md)
 
 ## TODO list
 
-- Load Balancers
-- Java App (start and stop)
 - FSDR infra
 - ADB-S
 - Data Guard
@@ -130,4 +128,18 @@ To clean config files and auxiliary files (SSH keys, certificates, etc):
 
 ```bash
 zx scripts/clean.mjs
+```
+
+Clean the Java application:
+
+```bash
+cd src/backend
+```
+
+```bash
+./gradlew clean
+```
+
+```bash
+cd ../..
 ```
