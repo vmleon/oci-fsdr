@@ -1,7 +1,11 @@
 package dev.victormartin.fsdr.backend.controller;
 
-import dev.victormartin.fsdr.backend.dao.Request;
-import dev.victormartin.fsdr.backend.dao.Response;
+import dev.victormartin.fsdr.backend.dao.RequestDao;
+import dev.victormartin.fsdr.backend.dao.ResponseDao;
+import dev.victormartin.fsdr.backend.data.Request;
+import dev.victormartin.fsdr.backend.data.RequestRepository;
+import dev.victormartin.fsdr.backend.data.Response;
+import dev.victormartin.fsdr.backend.data.ResponseRepository;
 import dev.victormartin.fsdr.backend.service.RunInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,18 +21,28 @@ public class InfoController {
     @Autowired
     RunInfoService runInfoService;
 
+    @Autowired
+    RequestRepository requestRepository;
+
+    @Autowired
+    ResponseRepository responseRepository;
+
     @PostMapping("/api/info")
-    public Response postInfo(@RequestBody Request request) {
-        log.info("POST /api/info: ID " + request.id() + "; Creation: "  + request.creationTimestamp());
+    public ResponseDao postInfo(@RequestBody RequestDao requestDao) {
+        log.info("POST /api/info: ID " + requestDao.id() + "; Creation: "  + requestDao.creationTimestamp());
+        Request request = new Request(requestDao.id(), requestDao.creationTimestamp());
+        requestRepository.save(request);
         String status = "ok";
         String region = runInfoService.getRegion();
         String errorMessage = "";
-        Response response = new Response(
-                request.id(),
+        ResponseDao responseDao = new ResponseDao(
+                requestDao.id(),
                 status,
-                request.creationTimestamp(),
+                requestDao.creationTimestamp(),
                 region,
                 errorMessage);
-        return response;
+        Response response = new Response(status, region, errorMessage, request);
+        responseRepository.save(response);
+        return responseDao;
     }
 }

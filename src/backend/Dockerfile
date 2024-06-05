@@ -1,5 +1,8 @@
 FROM --platform=linux/amd64 container-registry.oracle.com/java/jdk-no-fee-term:21-oraclelinux8 as build
 
+# RUN addgroup --system spring && adduser --system spring -ingroup spring
+# USER spring:spring
+
 RUN mkdir /opt/backend
 COPY . /opt/backend
 WORKDIR /opt/backend

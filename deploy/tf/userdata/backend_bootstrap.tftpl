@@ -1,39 +1,85 @@
 #!/bin/bash
 
-touch /home/opc/cloud-init.log
-chown -R opc:opc /home/opc/cloud-init.log
-
 # Update and upgrade repo
 dnf update -y
 dnf upgrade -y
 
-dnf install ansible -y | tee -a /home/opc/cloud-init.log
+dnf install ansible -y
+dnf install jdk-21-headless -y
+dnf install sqlcl -y
+
+# FIXME SQLcl config should be in ansible
 
 # Get wallet
-cat "wallet_par_full_path: ${wallet_par_full_path}" | tee -a /home/opc/cloud-init.log
-curl "${wallet_par_full_path}" -o /home/opc/wallet.zip.b64 | tee -a /home/opc/cloud-init.log
-base64 -d /home/opc/wallet.zip.b64 > /home/opc/wallet.zip && rm -rf /home/opc/wallet.zip.b64
-
+curl "${wallet_par_full_path}" -o /home/opc/sql_wallet.zip.b64
+base64 -d /home/opc/sql_wallet.zip.b64 > /home/opc/sql_wallet.zip && rm -rf /home/opc/sql_wallet.zip.b64
 # Extract wallet
+mkdir -p /home/opc/sql_wallet
+unzip /home/opc/sql_wallet.zip -d /home/opc/sql_wallet && rm -rf /home/opc/sql_wallet.zip
+sed -i -e 's/\?\/network\/admin/\/home\/opc\/sql_wallet/' /home/opc/sql_wallet/sqlnet.ora
+chown -R opc:opc /home/opc/sql_wallet
+
+# Creating highlight.json
+cat <<EOT >> /home/opc/highlight.json
+{
+    "highlights": [
+        {
+            "type": "regex",
+            "test": "^[0-9]+$",
+            "color": "RED"
+        },
+        {
+            "type": "regex",
+            "test": "^[^0-9]+$",
+            "color": "GREEN"
+        }
+    ]
+}
+EOT
+chown opc:opc /home/opc/highlight.json
+
+# Creating highlight.json
+cat <<EOT >> /home/opc/connection.sql
+conn -save adbhigh -url ${db_service}_high -savepwd -u ADMIN -password '${db_password}'
+EOT
+chown opc:opc /home/opc/connection.sql
+
+# Creating login.sql
+cat <<EOT >> /home/opc/login.sql
+SET statusbar ON
+
+SET highlighting ON
+SET sqlformat ansiconsole -config=highlight.json
+
+EOT
+chown opc:opc /home/opc/login.sql
+
+echo "export TNS_ADMIN=/home/opc/wallet" >> /home/opc/.bashrc
+
+# Get wallet
 mkdir -p /home/opc/backend/wallet
-unzip /home/opc/wallet.zip -d /home/opc/backend/wallet | tee -a /home/opc/cloud-init.log
+curl "${wallet_par_full_path}" -o /home/opc/wallet.zip.b64
+wget -O /home/opc/wget_wallet.zip.b64 "${wallet_par_full_path}"
+cat /home/opc/wallet.zip.b64 | base64 -d > /home/opc/wallet.zip && \
+    rm -rf /home/opc/wallet.zip.b64 && \
+    unzip /home/opc/wallet.zip -d /home/opc/backend/wallet
 chown -R opc:opc /home/opc/backend/wallet
 
 # Get backend_jar
-curl "${backend_jar_par_full_path}" -o /home/opc/backend_jar.zip | tee -a /home/opc/cloud-init.log
+curl "${backend_jar_par_full_path}" -o /home/opc/backend_jar.zip
 
 # Extract backend_jar
 mkdir -p /home/opc/backend
-unzip /home/opc/backend_jar.zip -d /home/opc/backend | tee -a /home/opc/cloud-init.log && \
+unzip /home/opc/backend_jar.zip -d /home/opc/backend && \
     rm /home/opc/backend_jar.zip
 chown -R opc:opc /home/opc/backend
 
 # Get ansible_backend
-curl "${ansible_backend_par_full_path}" -o /home/opc/ansible_backend.zip | tee -a /home/opc/cloud-init.log
+curl "${ansible_backend_par_full_path}" -o /home/opc/ansible_backend.zip
 
 # Extract ansible_backend
 mkdir -p /home/opc/ansible_backend
-unzip /home/opc/ansible_backend.zip -d /home/opc/ansible_backend | tee -a /home/opc/cloud-init.log && \
+unzip /home/opc/ansible_backend.zip -d /home/opc/ansible_backend && \
     rm /home/opc/ansible_backend.zip
 chown -R opc:opc /home/opc/ansible_backend
 
@@ -41,6 +87,7 @@ cat <<EOT >> /home/opc/ansible_params.json
 {
   "backend_dest_directory": "/home/opc/backend",
   "backend_jar_file": "backend-0.0.1.jar",
+  "wallet_par_full_path": "${wallet_par_full_path}", 
   "region_code_name": "${region_code_name}",
   "db_service": "${db_service}",
   "db_password": "${db_password}"

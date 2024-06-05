@@ -6,7 +6,7 @@ locals {
     wallet_par_full_path          = oci_objectstorage_preauthrequest.wallet_par_standby.full_path
     region_code_name              = var.region_peer
     db_service                    = "${local.project_name}${local.deploy_id}"
-    db_password                   = random_password.adb_admin_password_standby.result
+    db_password                   = random_password.adb_admin_password_primary.result
   })
 }
 

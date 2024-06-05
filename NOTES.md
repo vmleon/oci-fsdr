@@ -1,5 +1,39 @@
 # Full Stack Disaster Recovery Notes
 
+## IAM policies
+
+Create a user.
+
+Create a group `FullStackDRGroup` and add user to the group.
+
+Policies:
+
+```
+Allow group FullStackDRGroup to manage buckets in compartment COMPARTMENT_NAME
+Allow group FullStackDRGroup to manage objects in compartment COMPARTMENT_NAME
+Allow group FullStackDRGroup to manage databases in compartment COMPARTMENT_NAME
+Allow group FullStackDRGroup to manage autonomous-databases in compartment COMPARTMENT_NAME
+Allow group FullStackDRGroup to manage instance-family in compartment COMPARTMENT_NAME
+Allow group FullStackDRGroup to manage instance-agent-command-family in compartment COMPARTMENT_NAME
+Allow group FullStackDRGroup to manage volume-family in compartment COMPARTMENT_NAME
+Allow group FullStackDRGroup to read virtual-network-family in compartment COMPARTMENT_NAME
+Allow group FullStackDRGroup to use subnets in compartment COMPARTMENT_NAME
+Allow group FullStackDRGroup to use vnics in compartment COMPARTMENT_NAME
+Allow group FullStackDRGroup to use network-security-groups in compartment COMPARTMENT_NAME
+Allow group FullStackDRGroup to use private-ips in compartment COMPARTMENT_NAME
+Allow group FullStackDRGroup to read fn-app in compartment COMPARTMENT_NAME
+Allow group FullStackDRGroup to read fn-function in compartment COMPARTMENT_NAME
+Allow group FullStackDRGroup to use fn-invocation in compartment COMPARTMENT_NAME
+Allow group FullStackDRGroup use tag-namespaces in compartment COMPARTMENT_NAME
+Allow group FullStackDRGroup read vaults in compartment COMPARTMENT_NAME
+Allow group FullStackDRGroup read secret-family in compartment COMPARTMENT_NAME
+Allow group FullStackDRGroup to manage load-balancers in compartment COMPARTMENT_NAME
+Allow group FullStackDRGroup to manage network-load-balancers in compartment COMPARTMENT_NAME
+Allow group FullStackDRGroup to manage file-family in compartment COMPARTMENT_NAME
+```
+
+## Demo
+
 Create two DR Protection Groups for the primary and standby.
 `FRA` as primary, `LHR` as standby.
 

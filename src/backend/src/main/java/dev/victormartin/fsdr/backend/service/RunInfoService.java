@@ -12,8 +12,4 @@ public class RunInfoService {
     public String getRegion() {
         return regionName;
     }
-
-    public String getAvailabilityDomain() {
-        return "local";
-    }
 }

@@ -130,7 +130,7 @@ resource "oci_load_balancer_listener" "listener_nossl_standby" {
 
 resource "oci_load_balancer_certificate" "certificate_standby" {
   provider = oci.peer
-  certificate_name = "${local.project_name}.victormartin.dev"
+  certificate_name = "standby.${local.project_name}.victormartin.dev"
   load_balancer_id = oci_load_balancer.lb_standby.id
 
   ca_certificate     = file(var.cert_fullchain)
